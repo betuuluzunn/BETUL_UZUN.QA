@@ -17,11 +17,11 @@ Other Pages: Contains specific methods for different pages:
 
 Test Case Classes: Test case classes are located at:
 
-- File path: src > main > java > CareersPageTests.java
+- File path: src > test > java > CareersPageTests.java
 
 BaseTest: Contains base methods for running the test cases.
 
-- File path: src > main > java > BaseTest.java
+- File path: src > test > java > BaseTest.java
   
 CareersPageTests: Contains specific assignment test cases.
 
