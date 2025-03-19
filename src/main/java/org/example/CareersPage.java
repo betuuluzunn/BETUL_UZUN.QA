@@ -1,6 +1,7 @@
 package org.example;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -18,7 +19,7 @@ public class CareersPage extends BaseMethods {
         this.driver = driver;
     }
 
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60)); //Dynamic wait koydugum yerlerde 60 sn bekliyor
 
     private final By homePage = By.id("desktop_hero_24");
     private final By cookieAcceptButton = By.id("wt-cli-accept-all-btn");
@@ -34,40 +35,41 @@ public class CareersPage extends BaseMethods {
     private final By lifeComponent = By.className("elementor-widget-container");
     private final By filterComponent = By.xpath("/html/body/section[3]/div/div/div[2]/div[1]/div");
 
-    public void checkHomePage() {
+
+    public void checkHomePage() { //homepage görüldü mü onu kontrol et
         wait.until(ExpectedConditions.visibilityOfElementLocated(homePage));
     }
 
-    public void tapCookieButton() {
+    public void tapCookieButton() { //çerezi kapatma
         click(cookieAcceptButton);
     }
 
-    public void verifyCookieClosed() {
+    public void verifyCookieClosed() { //çerez butonunu kontrol et kapandı mı
         isElementPresent(cookieAcceptButton);
     }
 
     public void tapCareersButton() {
-        Actions actions = new Actions(driver);
-        WebElement companyElement = driver.findElement(companyButton);
-        actions.moveToElement(companyElement).perform();
+        Actions actions = new Actions(driver); //framework'un verdigi aksiyon sınıfı(mouse ile aksiyon yapılcak)
+        WebElement companyElement = driver.findElement(companyButton); //company butonunu bul
+        actions.moveToElement(companyElement).perform(); //hover
         WebElement careerElement = driver.findElement(careerButton);
-        careerElement.click();
+        careerElement.click(); //üstüne tık
     }
 
     public void verifyLocationsComponent() {
-        Actions actions = new Actions(driver);
+        Actions actions = new Actions(driver); //scroll icin yaptım
         WebElement locationElement = driver.findElement(locationComponent);
         actions.moveToElement(locationElement).perform();
     }
 
     public void verifyLifeComponent() {
-        Actions actions = new Actions(driver);
+        Actions actions = new Actions(driver); //lifeinsider'a scroll et
         WebElement lifeElement = driver.findElement(lifeComponent);
         actions.moveToElement(lifeElement).perform();
     }
 
     public void goToQaUrl () {
-        driver.get("https://useinsider.com/careers/quality-assurance/");
+        driver.get("https://useinsider.com/careers/quality-assurance/"); //aynı sekmede url'e gittim
     }
 
     public void tapQaJobs () {
@@ -75,19 +77,19 @@ public class CareersPage extends BaseMethods {
     }
 
     public void openFilter () throws InterruptedException {
-        Thread.sleep(10000);
-        Actions actions = new Actions(driver);
-        WebElement filterElement = driver.findElement(filterComponent);
-        actions.moveToElement(filterElement).perform();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollBy(0,500)");
         Thread.sleep(5000);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(filterComponent));
+        Thread.sleep(8000);
         click(openFilter);
     }
 
     public void selectLocation () {
-        click(selectLocation);
+        click(selectLocation); //istanbulu seç
     }
 
-    public void checkQualityAssuranceTexts () {
+    public void checkQualityAssuranceTexts () { //titleı  quality assurance olan textleri sırayla kontrol ettim
         List<WebElement> elements = driver.findElements(By.className("position-department"));
         for (WebElement element : elements) {
             String text = element.getText();
@@ -99,7 +101,7 @@ public class CareersPage extends BaseMethods {
         }
     }
 
-    public void checkLocationTexts () {
+    public void checkLocationTexts () {// istanbul olup olmamasını kontrol et.
         List<WebElement> elements = driver.findElements(By.className("position-location"));
         for (WebElement element : elements) {
             String text = element.getText();
@@ -111,18 +113,23 @@ public class CareersPage extends BaseMethods {
         }
     }
 
-    public void tapViewRoleButton () {
+    public void tapViewRoleButton () throws InterruptedException {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(), 'Senior Software Quality Assurance Engineer')]")));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollBy(0,200)");
         Actions actions = new Actions(driver);
         WebElement firstJobElement = driver.findElement(firstJobPosition);
-        actions.moveToElement(firstJobElement).perform();
+        actions.moveToElement(firstJobElement).perform(); //hover
         WebElement viewRoleElement = driver.findElement(viewRoleButton);
         viewRoleElement.click();
     }
 
-    public void verifyJobDetailPage () {
+    public void verifyJobDetailPage () throws InterruptedException { //yeni sekmeden devam etmek için
     Set<String> allWindowHandles = driver.getWindowHandles();
     ArrayList<String> tabs = new ArrayList<>(allWindowHandles);
-    driver.switchTo().window(tabs.get(1));
+    driver.switchTo().window(tabs.get(2));
+    Thread.sleep(10000);
     isElementPresent(jobDetailPage);
+
     }
 }

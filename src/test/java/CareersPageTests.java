@@ -3,7 +3,7 @@ import org.testng.annotations.Test;
 public class CareersPageTests extends BaseTest{
 
     @Test
-    public void test() throws InterruptedException {
+    public void verifyQADetailPageTest() throws InterruptedException { //testleri run ettigimiz class
         careersPage.checkHomePage();
         careersPage.tapCookieButton();
         careersPage.verifyCookieClosed();
